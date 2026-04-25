@@ -2,14 +2,11 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
-// CE on 9, CSN on 10
 RF24 radio(9, 10);
-// This address MUST match the transmitter exactly
 const byte address[6] = {0xE8, 0xE8, 0xF0, 0xF0, 0xE1};
 
-// Pin Definitions
-int enA = 3; int in1 = 2; int in2 = 4; // Left Side (PWM on 3)
-int enB = 5; int in3 = 7; int in4 = 8; // Right Side (PWM on 5)
+int enA = 3; int in1 = 2; int in2 = 4;
+int enB = 5; int in3 = 7; int in4 = 8;
 
 struct ControlData {
   int forwardBackward;
@@ -32,15 +29,11 @@ void setup() {
 void loop() {
   if (radio.available()) {
     radio.read(&data, sizeof(data));
-
-    // Print values to Serial Monitor to verify radio link
     Serial.print("Data Rx -> FB: "); Serial.print(data.forwardBackward);
     Serial.print(" LR: "); Serial.println(data.leftRight);
 
     processMovement();
   } else {
-    // If no signal, stop for safety
-    // Serial.println("No signal..."); // Uncomment for heavy debugging
     // stopMotors(); 
   }
 }
