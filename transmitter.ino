@@ -3,11 +3,9 @@
 #include <RF24.h>
 #include <Wire.h>
 
-// nRF24L01 Setup
-RF24 radio(9, 10); // CE, CSN
+RF24 radio(9, 10);
 const byte address[6] = {0xE8, 0xE8, 0xF0, 0xF0, 0xE1};
 
-// MPU6050 constants
 const int MPU_ADDR = 0x68;
 
 struct ControlData {
@@ -33,14 +31,11 @@ void setup() {
 void loop() {
   readMPU();
   
-  // Mapping logic
   data.forwardBackward = constrain(map(pitch, -30, 30, 0, 255), 0, 255);
   data.leftRight = constrain(map(roll, -30, 30, 0, 255), 0, 255);
 
-  // Attempt to send
   bool success = radio.write(&data, sizeof(data));
   
-  // Detailed output
   Serial.print("Pitch: "); Serial.print(pitch, 0);
   Serial.print(" | Roll: "); Serial.print(roll, 0);
   Serial.print(" | FB: "); Serial.print(data.forwardBackward);
@@ -52,7 +47,7 @@ void loop() {
     Serial.println(" >> [SEND FAILED - Receiver not found]");
   }
   
-  delay(100); // Slower delay for easier reading
+  delay(100);
 }
 
 void readMPU() {
